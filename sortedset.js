@@ -174,14 +174,26 @@
    */
   SortedSet.prototype.remove = function(element) {
     // TODO: Implement remove method\\
+    // console.log('setArray ',setArray);
+    // console.log('el ',element);
     if (!this.contains(element)) {
       console.log('element does not exist in the setArray');
       return;
     }
     var index = setArray.indexOf(element);
+    if (index === 0) {
+      return setArray.shift();
+    }
     var front = this.get(0,index-1);
-    var back = this.get(index+1,setArray.length);
-    return front.concat(back);
+    var back = this.get(index+1,setArray.length-1);
+    if (front.constructor === Array) { //if front is an array
+      setArray = front.concat(back);
+      return element;
+    }
+    // if front is a single element
+    setArray = back;
+    setArray.unshift(front);
+    return element;
   };
 
   /* Removes element at index location and returns the element
@@ -190,7 +202,7 @@
     // TODO: Implement removeAt method
     // self.remove(setArray[index])
     var el = this.get(index);
-    this.remove(el);
+    return this.remove(el);
   };
 
   /* Removes elements that are larger than lower bound and smaller than upper
@@ -200,8 +212,9 @@
     // TODO: Implement removeBetween method
     var remove = this.getBetween(lbound,ubound,exclusive);
     for (var i = 0; i < remove.length; i++) {
-      this.remove(element);
+      this.remove(remove[i]);
     }
+    return remove;
   };
 
   /* Removes all elements from the set
